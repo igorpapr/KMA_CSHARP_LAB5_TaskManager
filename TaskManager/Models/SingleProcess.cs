@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace TaskManager.Models
 {
@@ -32,42 +33,57 @@ namespace TaskManager.Models
         {
             get
             {
-                PerformanceCounter performance = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
-                return performance.NextValue() / 100;
-            }
-        }
-        public float RAMPercents
-        {
-            get
-            {
-                return _process.PrivateMemorySize64 / 1024;
+                PerformanceCounter p = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
+                return p.NextValue() / 100;
             }
         }
         public float RAMAmount
         {
-            get { return _RAMAmount; }
+            get { return _process.PrivateMemorySize64 / 1024; }
         }
-        public int ThreadsNumber
+        public int Threads
         {
-            get { return _threadsNumber; }
+            get { return _process.Threads.Count; }
         }
         public string User
         {
-            get { return _user; }
+            get { return _process.MachineName; }
         }
+
         public string Filepath
         {
-            get { return _filepath; }
+            get
+            {
+                try
+                {
+                    return _process.MainModule.FileName;
+                }
+                catch (Exception e) //because of security
+                {
+                    return "Access denied";
+                }
+            }
         }
-        public DateTime StartingTime
+
+        public string StartingTime
         {
-            get { return _startingTime; }
+            get
+            {
+                try
+                {
+                    return _process.StartTime.ToString("HH:mm:ss, MM/dd/yyyy");//.ToString(CultureInfo.InvariantCulture);
+                }
+                catch (Exception e)
+                {
+                    return "Access denied";
+                }
+            }
         }
         #endregion
 
         internal SingleProcess(Process process)
         {
-            
+            _process = process;
         }
     }
 }

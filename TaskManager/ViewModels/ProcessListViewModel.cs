@@ -29,7 +29,6 @@ namespace TaskManager.ViewModels
         private RelayCommand<object> _sortByName;
         private RelayCommand<object> _sortByIsActive;
         private RelayCommand<object> _sortByCPUPercents;
-        private RelayCommand<object> _sortByRAMPercents;
         private RelayCommand<object> _sortByRAMAmount;
         private RelayCommand<object> _sortByThreadsNumber;
         private RelayCommand<object> _sortByUser;
@@ -143,28 +142,12 @@ namespace TaskManager.ViewModels
                            SortImplementation(o, 3)));
             }
         }
-        public RelayCommand<object> SortByRAMPercents
-        {
-            get
-            {
-                return _sortByRAMPercents ?? (_sortByRAMPercents = new RelayCommand<object>(o =>
-                           SortImplementation(o, 4)));
-            }
-        }
-        public RelayCommand<object> SortByRAMAmount
-        {
-            get
-            {
-                return _sortByRAMAmount ?? (_sortByRAMAmount = new RelayCommand<object>(o =>
-                           SortImplementation(o, 5)));
-            }
-        }
         public RelayCommand<object> SortByThreadsNumber
         {
             get
             {
                 return _sortByThreadsNumber ?? (_sortByThreadsNumber = new RelayCommand<object>(o =>
-                           SortImplementation(o, 6)));
+                           SortImplementation(o, 5)));
             }
         }
         public RelayCommand<object> SortByUser
@@ -172,7 +155,7 @@ namespace TaskManager.ViewModels
             get
             {
                 return _sortByUser ?? (_sortByUser = new RelayCommand<object>(o =>
-                           SortImplementation(o, 7)));
+                           SortImplementation(o, 6)));
             }
         }
         public RelayCommand<object> SortByFilepath
@@ -180,7 +163,7 @@ namespace TaskManager.ViewModels
             get
             {
                 return _sortByFilepath ?? (_sortByFilepath = new RelayCommand<object>(o =>
-                           SortImplementation(o, 8)));
+                           SortImplementation(o, 7)));
             }
         }
         public RelayCommand<object> SortByStartingTime
@@ -188,7 +171,7 @@ namespace TaskManager.ViewModels
             get
             {
                 return _sortByStartingTime ?? (_sortByStartingTime = new RelayCommand<object>(o =>
-                           SortImplementation(o, 9)));
+                           SortImplementation(o, 8)));
             }
         }
 
@@ -260,25 +243,20 @@ namespace TaskManager.ViewModels
                         break;
                     case 4:
                         sortedProcesses = from u in _processes
-                                          orderby u.RAMPercents
+                                          orderby u.RAMAmount
                                         select u;
                         break;
                     case 5:
                         sortedProcesses = from u in _processes
-                                          orderby u.RAMAmount
+                                          orderby u.Threads
                                         select u;
                         break;
                     case 6:
                         sortedProcesses = from u in _processes
-                                          orderby u.ThreadsNumber
-                                        select u;
-                        break;
-                    case 7:
-                        sortedProcesses = from u in _processes
                                           orderby u.User
                                         select u;
                         break;
-                    case 8:
+                    case 7:
                         sortedProcesses = from u in _processes
                                           orderby u.Filepath
                                         select u;
@@ -315,8 +293,7 @@ namespace TaskManager.ViewModels
             {
                 StationManager.UpdateProcessList();
 
-                //@TODO ADD METADATA UPDATING EVERY TWO SECONDS
-
+                //@TODO ADD METADATA UPDATING EVERY TWO SECOND
 
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
                 for (int i = 0; i < 5; i++)
@@ -333,7 +310,7 @@ namespace TaskManager.ViewModels
         internal void StopWorkingThread()
         {
             _tokenSource.Cancel();
-            _workingThread.Join(2000);
+            _workingThread.Join(1000);
             _workingThread.Abort();
             _workingThread = null;
         }

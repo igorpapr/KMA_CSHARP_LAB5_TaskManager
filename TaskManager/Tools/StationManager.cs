@@ -28,10 +28,13 @@ namespace TaskManager.Tools
             UpdateProcessList();
         }
 
+        //SortProcessList();
+
+
         internal static void UpdateProcessList()
-        {                                                    //@TODO DELETING
+        {   
+            //@TODO DELETING AND SORTING
             AddMissingProcesses();
-            SortProcessList();
         }
 
         private static void AddMissingProcesses()
