@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
+using TaskManager.Tools;
 using TaskManager.ViewModels;
 
 namespace TaskManager
@@ -11,7 +13,14 @@ namespace TaskManager
         public MainWindow()
         {
             InitializeComponent();
+            StationManager.Initialize();
             DataContext = new ProcessListViewModel();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            StationManager.CloseApp();
         }
     }
 }

@@ -12,12 +12,18 @@
             <!--Menu-->
             <RowDefinition Height="4.5*"/>
             <!--Table-->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
             <!--Buttons-->
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="Sort">
-                <MenuItem Header="Sort by ID" Command="{Binding SortByID}"></MenuItem>
+                <MenuItem Header="Sort by ID" Command="{Binding SortById}"></MenuItem>
                 <MenuItem Header="Sort by process name" Command="{Binding SortByName}"></MenuItem>
                 <MenuItem Header="Sort by IsActive" Command="{Binding SortByIsActive}"></MenuItem>
                 <MenuItem Header="Sort by % of CPU" Command="{Binding SortByCPUPercents}"></MenuItem>
@@ -29,7 +35,7 @@
                 <MenuItem Header="Sort by starting time" Command="{Binding SortByStartingTime}"></MenuItem>
             </MenuItem>
         </Menu>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Persons, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" SelectedValue="{Binding SelectedPerson,UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True">
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Persons, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" SelectedValue="{Binding SelectedPerson,UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" IsReadOnly="True" CanUserSortColumns="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"         Width="35"    Binding="{Binding ID, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Name"       Width="180"   Binding="{Binding Name, Mode=OneWay}"></DataGridTextColumn>
@@ -43,5 +49,9 @@
                 <DataGridTextColumn Header="Starting time" Width="Auto"  Binding="{Binding StartingTime, Mode=OneWay, StringFormat=dd/MM/yyyy}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="2" Grid.Column="0" Margin="10 5" Content="Open folder" Command="{Binding OpenFolder, UpdateSourceTrigger=PropertyChanged}"></Button>
+        <Button Grid.Row="2" Grid.Column="1" Margin="10 5" Content="Show list of threads" Command="{Binding ShowThreads, UpdateSourceTrigger=PropertyChanged}"></Button>
+        <Button Grid.Row="2" Grid.Column="3" Margin="10 5" Content="Show list of modules" Command="{Binding ShowModules, UpdateSourceTrigger=PropertyChanged}"></Button>
+        <Button Grid.Row="3" Grid.Column="3" Width="150" HorizontalAlignment="Right" Margin="0 5 15 5" Content="End Task" Foreground="Red" FontWeight="Bold" Command="{Binding EndTask, UpdateSourceTrigger=PropertyChanged}"></Button>
     </Grid>
 </Window>

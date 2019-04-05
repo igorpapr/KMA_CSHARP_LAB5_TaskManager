@@ -7,40 +7,41 @@ namespace TaskManager.Models
     {
         #region Fields
 
-        private Process _process;
-
-        private readonly string _iD;
-        private readonly string _name;
-        private bool _isActive;
-        private float _CPUPercents;
-        private float _RAMPercents;
-        private float _RAMAmount;
-        private int _threadsNumber;
-        private readonly string _user;
-        private string _filepath;
-        private readonly DateTime _startingTime;
+        private readonly Process _process;
         #endregion
 
         #region Properties
-        public string ID
+        public Process ProcessItself
         {
-            get { return _iD; }
+            get { return _process; }
+        }
+
+        public int ID
+        {
+            get { return _process.Id; }
         }
         public string Name
         {
-            get { return _name; }
+            get { return _process.ProcessName; }
         }
         public bool IsActive
         {
-            get { return _isActive; }
+            get { return _process.Responding; }
         }
         public float CPUPercents
         {
-            get { return _CPUPercents; }
+            get
+            {
+                PerformanceCounter performance = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
+                return performance.NextValue() / 100;
+            }
         }
         public float RAMPercents
         {
-            get { return _RAMPercents; }
+            get
+            {
+                return _process.PrivateMemorySize64 / 1024;
+            }
         }
         public float RAMAmount
         {
@@ -64,7 +65,7 @@ namespace TaskManager.Models
         }
         #endregion
 
-        internal SingleProcess(ref Process process)
+        internal SingleProcess(Process process)
         {
             
         }
