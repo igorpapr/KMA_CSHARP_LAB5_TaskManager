@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace TaskManager.Models
 {
@@ -18,6 +20,8 @@ namespace TaskManager.Models
         private float _cpuPercents;
         private float _ramAmount;
         private int _threads;
+
+        private PerformanceCounter perfCounter;
         #endregion
 
         #region Properties
@@ -43,8 +47,7 @@ namespace TaskManager.Models
         {
             get
             {
-                PerformanceCounter p = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
-                return p.NextValue() / 100;
+                return perfCounter.NextValue() / Environment.ProcessorCount;
             }
         }
         public float RAMAmount
@@ -57,8 +60,34 @@ namespace TaskManager.Models
         }
         public string User
         {
-            get { return _process.MachineName; }
+            get
+            {
+                IntPtr processHandle = IntPtr.Zero;
+                try
+                {
+                    OpenProcessToken(_process.Handle, 8, out processHandle);
+                    WindowsIdentity wi = new WindowsIdentity(processHandle);
+                    string user = wi.Name;
+                    return user.Contains(@"\") ? user.Substring(user.IndexOf(@"\") + 1) : user;
+                }
+                catch
+                {
+                    return null;
+                }
+                finally
+                {
+                    if (processHandle != IntPtr.Zero)
+                    {
+                        CloseHandle(processHandle);
+                    }
+                }
+            }
         }
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr hObject);
 
         public ProcessModuleCollection Modules
         {
@@ -84,7 +113,7 @@ namespace TaskManager.Models
                 {
                     return _process.MainModule.FileName;
                 }
-                catch (Exception e) //because of security
+                catch (Exception e)
                 {
                     return "Access denied";
                 }
@@ -119,6 +148,8 @@ namespace TaskManager.Models
         internal SingleProcess(Process process)
         {
             _process = process;
+            perfCounter = new PerformanceCounter("Process", "% Processor Time", "chrome");
+            perfCounter.NextValue();
         }
     }
 }

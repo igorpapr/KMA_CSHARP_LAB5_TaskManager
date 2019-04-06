@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using TaskManager.Models;
 
@@ -34,7 +33,8 @@ namespace TaskManager.Tools
         internal static void UpdateProcessList()
         {
             lock(_processList)
-            { 
+            {
+                _processList.Clear();
                 AddMissingProcesses();
                 SortProcessList();
             }
@@ -62,22 +62,22 @@ namespace TaskManager.Tools
                     break;
                 case 3:
                     _processList = (from u in _processList
-                                      orderby u.CPUPercents
+                                      orderby u.CPUPercents descending 
                                       select u).ToList();
                     break;
                 case 4:
                     _processList = (from u in _processList
-                                      orderby u.RAMAmount
+                                      orderby u.RAMAmount descending 
                                       select u).ToList();
                     break;
                 case 5:
                     _processList = (from u in _processList
-                                      orderby u.Threads
+                                      orderby u.Threads descending 
                                       select u).ToList();
                     break;
                 case 6:
                     _processList = (from u in _processList
-                                      orderby u.User
+                                      orderby u.User descending 
                                       select u).ToList();
                     break;
                 case 7:
@@ -87,7 +87,7 @@ namespace TaskManager.Tools
                     break;
                 default:
                     _processList = (from u in _processList
-                                      orderby u.StartingTime
+                                      orderby u.StartingTime descending 
                                       select u).ToList();
                     break;
             }

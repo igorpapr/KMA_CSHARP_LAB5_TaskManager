@@ -190,9 +190,9 @@ namespace TaskManager.ViewModels
             await Task.Run(() => { 
             if (_selectedProcess.checkAvailability())
             {
-                _selectedProcess.ProcessItself?.Kill(); //_selectedProcess.ID
+                SelectedProcess?.ProcessItself?.Kill(); //_selectedProcess.ID
                 StationManager.UpdateProcessList();
-                _selectedProcess = null;
+                SelectedProcess = null;
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
             }
             else
@@ -219,20 +219,31 @@ namespace TaskManager.ViewModels
         private void ShowModulesImplementation(object obj)
         {
             IsControlEnabled = false;
-            ShowModulesWindow smw = new ShowModulesWindow(ref _selectedProcess);
-            smw.ShowDialog();
-
+            try
+            {
+                ShowModulesWindow smw = new ShowModulesWindow(ref _selectedProcess);
+                smw.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error occurred while processing modules info");
+            }
             IsControlEnabled = true;
         }
 
         private void ShowThreadsImplementation(object obj)
         {
             IsControlEnabled = false;
-            ShowThreadsWindow smw = new ShowThreadsWindow(ref _selectedProcess);
-            smw.ShowDialog();
-
+            try
+            {
+                ShowThreadsWindow smw = new ShowThreadsWindow(ref _selectedProcess);
+                smw.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error occurred while processing threads info");
+            }
             IsControlEnabled = true;
-
         }
 
         private async void SortImplementation(object obj, int param)
@@ -273,19 +284,19 @@ namespace TaskManager.ViewModels
             int temp = 0;
             while (!_token.IsCancellationRequested)
             {
-                if (_selectedProcess != null)
+                if (SelectedProcess != null)
                 {
-                    temp = _selectedProcess.ID;
+                    temp = SelectedProcess.ID;
                 }
                 StationManager.UpdateProcessList();
                 
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
 
-                if (_selectedProcess != null)
+                if (SelectedProcess != null)
                 { 
-                    _selectedProcess = Processes.Single(i => i.ID == temp);
+                    SelectedProcess = Processes.Single(i => i.ID == temp);
                 }
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     Thread.Sleep(1000);
                     if (_token.IsCancellationRequested)
