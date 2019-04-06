@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -229,11 +227,11 @@ namespace TaskManager.ViewModels
 
         private void ShowThreadsImplementation(object obj)
         {
-        //    IsControlEnabled = false;
-        //    ShowThreadsWindow smw = new ShowThreadsWindow();
-        //    smw.ShowDialog();
+            IsControlEnabled = false;
+            ShowThreadsWindow smw = new ShowThreadsWindow(ref _selectedProcess);
+            smw.ShowDialog();
 
-        //    IsControlEnabled = true;
+            IsControlEnabled = true;
 
         }
 

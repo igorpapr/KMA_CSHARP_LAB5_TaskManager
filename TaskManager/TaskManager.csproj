@@ -61,14 +61,19 @@
     </ApplicationDefinition>
     <Compile Include="Models\SingleModule.cs" />
     <Compile Include="Models\SingleProcess.cs" />
+    <Compile Include="Models\SingleThread.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tools\BaseViewModel.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\StationManager.cs" />
     <Compile Include="ViewModels\ProcessListViewModel.cs" />
     <Compile Include="ViewModels\ShowModulesViewModel.cs" />
+    <Compile Include="ViewModels\ShowThreadsViewModel.cs" />
     <Compile Include="Windows\ShowModulesWindow.xaml.cs">
       <DependentUpon>ShowModulesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ShowThreadsWindow.xaml.cs">
+      <DependentUpon>ShowThreadsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -83,6 +88,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\ShowModulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ShowThreadsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

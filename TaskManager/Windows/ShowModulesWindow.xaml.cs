@@ -24,11 +24,10 @@ namespace TaskManager.Windows
         public ShowModulesWindow(ref SingleProcess proc)
         {
             InitializeComponent();
-            //ShowModulesViewModel vm 
-                DataContext = new ShowModulesViewModel(ref proc);
-            //DataContext = vm;
-            //if (vm.CloseAction == null)
-            //    vm.CloseAction = new Action(this.Close);
+            ShowModulesViewModel vm = new ShowModulesViewModel(ref proc);
+            DataContext = vm;
+            if (vm.CloseAction == null)
+                vm.CloseAction = new Action(this.Close);
         }
     }
 }

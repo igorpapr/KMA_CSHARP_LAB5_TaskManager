@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager.Windows"
         mc:Ignorable="d"
-        Title="ShowThreadsWindow" Height="450" Width="800">
+        Title="Threads" Height="450"  Width="500" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*">
+            </RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Content="{Binding ProcessName}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"></Label>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Threads, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                  AutoGenerateColumns="False" 
+                  ScrollViewer.CanContentScroll="True"
+                  IsReadOnly="True" CanUserSortColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"     Width="130"   Binding="{Binding Id, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="State" Width="130"   Binding="{Binding State, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="State" Width="*"   Binding="{Binding StartingTime, Mode=OneWay, StringFormat=HH:mm:ss; dd/MM/yyyy}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

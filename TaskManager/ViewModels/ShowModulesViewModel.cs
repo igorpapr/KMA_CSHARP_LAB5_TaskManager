@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
+using System.Windows;
 using TaskManager.Models;
 using TaskManager.Tools;
 
@@ -16,11 +16,13 @@ namespace TaskManager.ViewModels
             get;
         }
 
-        internal ObservableCollection<SingleModule> Modules
+        public ObservableCollection<SingleModule> Modules
         {
             get
             {
+                
                 return _modules;
+                
             }
             private set
             {
@@ -33,6 +35,7 @@ namespace TaskManager.ViewModels
 
         internal ShowModulesViewModel(ref SingleProcess process)
         {
+            Modules = new ObservableCollection<SingleModule>();
             ObservableCollection<SingleModule> tmp = new ObservableCollection<SingleModule>();
             ProcessName = process.Name;
             int id = process.ID;

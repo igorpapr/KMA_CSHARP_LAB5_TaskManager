@@ -33,17 +33,8 @@ namespace TaskManager.Tools
         
         internal static void UpdateProcessList(int targetId = -1)
         {
-
-            Process[] processes = Process.GetProcesses();
-            foreach (var process in processes)
-            {
-                if (process != null)
-                {
-                    if (!FoundTheSameInProcessList(new SingleProcess(process).ID))
-                        _processList.Add(new SingleProcess(process));
-                }
-
-            }
+            AddMissingProcesses();
+            
             SortProcessList();
             //if (targetId != -1)
             //{
@@ -61,7 +52,6 @@ namespace TaskManager.Tools
 
         internal static void SortProcessList()
         {            
-            //IOrderedEnumerable<SingleProcess> sortedProcesses;
             switch (SortingParameter)
             {
                 case 0:

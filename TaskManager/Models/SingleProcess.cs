@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.Windows.Documents;
 
 namespace TaskManager.Models
 {
@@ -61,6 +57,14 @@ namespace TaskManager.Models
             }
         }
 
+        public ProcessThreadCollection ThreadsCollection
+        {
+            get
+            {
+                return _process.Threads;
+            }
+        }
+
         public string Filepath
         {
             get
@@ -91,7 +95,7 @@ namespace TaskManager.Models
             {
                 try
                 {
-                    return _process.StartTime.ToString("HH:mm:ss MM/dd/yyyy");
+                    return _process.StartTime.ToString("HH:mm:ss dd/MM/yyyy");
                 }
                 catch (Exception e)
                 {
