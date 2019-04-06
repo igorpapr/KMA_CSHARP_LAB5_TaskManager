@@ -8,6 +8,16 @@ namespace TaskManager.Models
         #region Fields
 
         private readonly Process _process;
+        private readonly int _id;
+        private readonly string _name;
+        private readonly string _filepath;
+        private readonly DateTime _startingTime;
+        private readonly string _user;
+
+        private bool _isActive;
+        private float _cpuPercents;
+        private float _ramAmount;
+        private int _threads;
         #endregion
 
         #region Properties
@@ -27,6 +37,7 @@ namespace TaskManager.Models
         public bool IsActive
         {
             get { return _process.Responding; }
+
         }
         public float CPUPercents
         {

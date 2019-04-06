@@ -31,23 +31,13 @@ namespace TaskManager.Tools
         }
 
         
-        internal static void UpdateProcessList(int targetId = -1)
+        internal static void UpdateProcessList()
         {
-            AddMissingProcesses();
-            
-            SortProcessList();
-            //if (targetId != -1)
-            //{
-            //    _processList.Remove(_processList.Find(o =>
-            //    {
-            //        if (o.ID == targetId)
-            //            return true;
-            //        return false;
-            //    }));
-            //}
-            ////@TODO DELETING AND SORTING
-            ////RemoveKilledProcesses();
-            //AddMissingProcesses();
+            lock(_processList)
+            { 
+                AddMissingProcesses();
+                SortProcessList();
+            }
         }
 
         internal static void SortProcessList()
@@ -103,30 +93,6 @@ namespace TaskManager.Tools
             }
         }
 
-        private static void RemoveKilledProcesses()
-        {
-            foreach (var item in _processList)
-            {
-                if (item != null)
-                {
-                    if (!FoundTheSameInProcessArray(item.ID))
-                        _processList.Remove(item);
-                }
-            }
-        }
-
-        private static bool FoundTheSameInProcessArray(int processId)
-        {
-            foreach (var item in Process.GetProcesses())
-            {
-                if (processId == item.Id)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private static void AddMissingProcesses()
         {
             foreach (var item in Process.GetProcesses())
@@ -150,6 +116,8 @@ namespace TaskManager.Tools
             }
             return false;
         }
+
+
 
         internal static void CloseApp()
         {

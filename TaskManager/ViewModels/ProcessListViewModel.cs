@@ -278,18 +278,16 @@ namespace TaskManager.ViewModels
                     temp = _selectedProcess.ID;
                 }
                 StationManager.UpdateProcessList();
-
-                //@TODO ADD METADATA UPDATING EVERY TWO SECOND
-
+                
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
 
                 if (_selectedProcess != null)
                 { 
                     _selectedProcess = Processes.Single(i => i.ID == temp);
                 }
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    Thread.Sleep(4000);
+                    Thread.Sleep(1000);
                     if (_token.IsCancellationRequested)
                         break;
                 }
