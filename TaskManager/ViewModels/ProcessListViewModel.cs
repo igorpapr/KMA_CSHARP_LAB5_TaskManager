@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.TextFormatting;
 using TaskManager.Models;
 using TaskManager.Tools;
 using TaskManager.Windows;
@@ -191,6 +192,7 @@ namespace TaskManager.ViewModels
             if (_selectedProcess.checkAvailability())
             {
                 SelectedProcess?.ProcessItself?.Kill(); //_selectedProcess.ID
+                StationManager.DeleteProcess(ref _selectedProcess);
                 StationManager.UpdateProcessList();
                 SelectedProcess = null;
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
@@ -281,27 +283,28 @@ namespace TaskManager.ViewModels
 
         private void WorkingThreadProcess()
         {
-            int temp = 0;
             while (!_token.IsCancellationRequested)
             {
+                int temp = -1;
                 if (SelectedProcess != null)
                 {
                     temp = SelectedProcess.ID;
                 }
+
                 StationManager.UpdateProcessList();
-                
+
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
 
-                if (SelectedProcess != null)
-                { 
-                    SelectedProcess = Processes.Single(i => i.ID == temp);
-                }
-                for (int i = 0; i < 2; i++)
+                foreach (var p in Processes)
                 {
-                    Thread.Sleep(1000);
-                    if (_token.IsCancellationRequested)
+                    if (p.ID == temp)
+                    {
+                        SelectedProcess = p;
                         break;
+                    }
                 }
+                Thread.Sleep(2000);
+                
                 if (_token.IsCancellationRequested)
                     break;
             }

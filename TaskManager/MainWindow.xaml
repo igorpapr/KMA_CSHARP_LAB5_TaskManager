@@ -37,9 +37,9 @@
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
                   ItemsSource="{Binding Processes, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
                   AutoGenerateColumns="False" 
-                  SelectedValue="{Binding SelectedProcess, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" 
+                  SelectedValue="{Binding SelectedProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                   ScrollViewer.CanContentScroll="True"
-                  IsReadOnly="True" CanUserSortColumns="False">
+                  IsReadOnly="True" CanUserSortColumns="False" SelectedIndex="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"         Width="45"    Binding="{Binding ID, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Name"       Width="180"   Binding="{Binding Name, Mode=OneWay}"></DataGridTextColumn>

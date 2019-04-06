@@ -19,6 +19,7 @@ namespace TaskManager.Tools
         {
             get { return _processList; }
         }
+
         internal static int SortingParameter { get; set; }
         #endregion
 
@@ -29,15 +30,16 @@ namespace TaskManager.Tools
             UpdateProcessList();
         }
 
-        
+        internal static void DeleteProcess(ref SingleProcess p)
+        {
+            _processList.Remove(p);
+        }
+
         internal static void UpdateProcessList()
         {
-            lock(_processList)
-            {
-                _processList.Clear();
-                AddMissingProcesses();
-                SortProcessList();
-            }
+           //_processList.Clear();
+           AddMissingProcesses();
+           SortProcessList();
         }
 
         internal static void SortProcessList()
