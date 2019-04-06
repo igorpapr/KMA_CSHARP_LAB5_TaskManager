@@ -65,13 +65,22 @@ namespace TaskManager.Models
             }
         }
 
+        public bool checkAvailability()
+        {
+            if (StartingTime == "Access denied")
+            {
+                return false;
+            }
+            return true;
+        }
+
         public string StartingTime
         {
             get
             {
                 try
                 {
-                    return _process.StartTime.ToString("HH:mm:ss, MM/dd/yyyy");//.ToString(CultureInfo.InvariantCulture);
+                    return _process.StartTime.ToString("HH:mm:ss MM/dd/yyyy");
                 }
                 catch (Exception e)
                 {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using TaskManager.Models;
 using TaskManager.Tools;
 
@@ -142,6 +143,14 @@ namespace TaskManager.ViewModels
                            SortImplementation(o, 3)));
             }
         }
+        public RelayCommand<object> SortByRAMAmount
+        {
+            get
+            {
+                return _sortByRAMAmount ?? (_sortByRAMAmount = new RelayCommand<object>(o =>
+                           SortImplementation(o, 4)));
+            }
+        }
         public RelayCommand<object> SortByThreadsNumber
         {
             get
@@ -179,28 +188,40 @@ namespace TaskManager.ViewModels
 
         private async void EndTaskImplementation(object obj)
         {
-            await Task.Run(() =>
+            await Task.Run(() => { 
+            if (_selectedProcess.checkAvailability())
             {
-                SelectedProcess.ProcessItself.Kill();
+                _selectedProcess.ProcessItself?.Kill(); //_selectedProcess.ID
                 StationManager.UpdateProcessList();
-            });
-        }
-
-        private async void OpenFolderImplementation(object obj)
-        {
-            await Task.Run(() =>
+                _selectedProcess = null;
+                Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
+            }
+            else
             {
-                //SelectedProcess.ProcessItself.Kill();
-                //StationManager.UpdateProcessList();
-            });
+                MessageBox.Show("Have no access");
+            }
+        });
+    }
+        
+        private void OpenFolderImplementation(object obj)
+        {
+            try
+            {
+                Process.Start("explorer.exe",
+                    _selectedProcess.Filepath.Substring(0,
+                        _selectedProcess.Filepath.LastIndexOf("\\", StringComparison.Ordinal)));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error while accessing process data");
+            }
         }
 
         private async void ShowModulesImplementation(object obj)
         {
             await Task.Run(() =>
             {
-                //SelectedProcess.ProcessItself.Kill();
-                //StationManager.UpdateProcessList();
+
             });
         }
 
@@ -208,66 +229,17 @@ namespace TaskManager.ViewModels
         {
             await Task.Run(() =>
             {
-                //SelectedProcess.ProcessItself.Kill();
-                //StationManager.UpdateProcessList();
+
             });
         }
 
-        private async void SortImplementation(object obj, int i)
+        private async void SortImplementation(object obj, int param)
         {
             await Task.Run(() =>
             {
-                IOrderedEnumerable<SingleProcess> sortedProcesses;
-                switch (i)
-                {
-                    case 0:
-                        sortedProcesses = from u in _processes
-                            orderby u.ID
-                            select u;
-                        break;
-
-                    case 1:
-                        sortedProcesses = from u in _processes
-                                        orderby u.Name
-                                        select u;
-                        break;
-                    case 2:
-                        sortedProcesses = from u in _processes
-                                          orderby u.IsActive
-                                        select u;
-                        break;
-                    case 3:
-                        sortedProcesses = from u in _processes
-                                          orderby u.CPUPercents
-                                        select u;
-                        break;
-                    case 4:
-                        sortedProcesses = from u in _processes
-                                          orderby u.RAMAmount
-                                        select u;
-                        break;
-                    case 5:
-                        sortedProcesses = from u in _processes
-                                          orderby u.Threads
-                                        select u;
-                        break;
-                    case 6:
-                        sortedProcesses = from u in _processes
-                                          orderby u.User
-                                        select u;
-                        break;
-                    case 7:
-                        sortedProcesses = from u in _processes
-                                          orderby u.Filepath
-                                        select u;
-                        break;
-                    default:
-                        sortedProcesses = from u in _processes
-                                          orderby u.StartingTime
-                                        select u;
-                        break;
-                }
-                Processes = new ObservableCollection<SingleProcess>(sortedProcesses);
+                StationManager.SortingParameter = param;
+                StationManager.UpdateProcessList();
+                Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
             });
          }
 
@@ -289,16 +261,26 @@ namespace TaskManager.ViewModels
 
         private void WorkingThreadProcess()
         {
+            int temp = 0;
             while (!_token.IsCancellationRequested)
             {
+                if (_selectedProcess != null)
+                {
+                    temp = _selectedProcess.ID;
+                }
                 StationManager.UpdateProcessList();
 
                 //@TODO ADD METADATA UPDATING EVERY TWO SECOND
 
                 Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
+
+                if (_selectedProcess != null)
+                { 
+                    _selectedProcess = Processes.Single(i => i.ID == temp);
+                }
                 for (int i = 0; i < 5; i++)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(4000);
                     if (_token.IsCancellationRequested)
                         break;
                 }
