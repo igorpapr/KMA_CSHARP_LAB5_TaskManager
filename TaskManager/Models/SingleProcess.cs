@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Windows.Documents;
 
 namespace TaskManager.Models
 {
-    class SingleProcess
+    public class SingleProcess
     {
         #region Fields
 
@@ -48,6 +51,14 @@ namespace TaskManager.Models
         public string User
         {
             get { return _process.MachineName; }
+        }
+
+        public ProcessModuleCollection Modules
+        {
+            get
+            {
+                return _process.Modules;
+            }
         }
 
         public string Filepath

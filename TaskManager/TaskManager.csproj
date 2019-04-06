@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,12 +59,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\SingleModule.cs" />
     <Compile Include="Models\SingleProcess.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tools\BaseViewModel.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\StationManager.cs" />
     <Compile Include="ViewModels\ProcessListViewModel.cs" />
+    <Compile Include="ViewModels\ShowModulesViewModel.cs" />
+    <Compile Include="Windows\ShowModulesWindow.xaml.cs">
+      <DependentUpon>ShowModulesWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,6 +82,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\ShowModulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

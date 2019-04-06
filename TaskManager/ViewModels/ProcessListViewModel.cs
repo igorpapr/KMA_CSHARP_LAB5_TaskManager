@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TaskManager.Models;
 using TaskManager.Tools;
+using TaskManager.Windows;
 
 namespace TaskManager.ViewModels
 {
@@ -21,8 +22,8 @@ namespace TaskManager.ViewModels
         private SingleProcess _selectedProcess;
 
         private Thread _workingThread;
-        private CancellationToken _token;
-        private CancellationTokenSource _tokenSource;
+        private readonly CancellationToken _token;
+        private readonly CancellationTokenSource _tokenSource;
 
         #region Commands
         #region Sort
@@ -213,33 +214,43 @@ namespace TaskManager.ViewModels
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error while accessing process data");
+                MessageBox.Show("Error while accessing processing data");
             }
         }
 
-        private async void ShowModulesImplementation(object obj)
+        private void ShowModulesImplementation(object obj)
         {
-            await Task.Run(() =>
-            {
+            IsControlEnabled = false;
+            ShowModulesWindow smw = new ShowModulesWindow(ref _selectedProcess);
+            smw.ShowDialog();
 
-            });
+            IsControlEnabled = true;
         }
 
-        private async void ShowThreadsImplementation(object obj)
+        private void ShowThreadsImplementation(object obj)
         {
-            await Task.Run(() =>
-            {
+        //    IsControlEnabled = false;
+        //    ShowThreadsWindow smw = new ShowThreadsWindow();
+        //    smw.ShowDialog();
 
-            });
+        //    IsControlEnabled = true;
+
         }
 
         private async void SortImplementation(object obj, int param)
         {
             await Task.Run(() =>
             {
-                StationManager.SortingParameter = param;
-                StationManager.UpdateProcessList();
-                Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
+                try
+                {
+                    StationManager.SortingParameter = param;
+                    StationManager.UpdateProcessList();
+                    Processes = new ObservableCollection<SingleProcess>(StationManager.ProcessList);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error occurred while accessing process data");
+                }
             });
          }
 
